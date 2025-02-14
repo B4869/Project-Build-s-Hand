@@ -1,138 +1,97 @@
-import { Link } from "@inertiajs/react"
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function Homepage() {
-  const features = [
-    { icon: "💡", title: "ไอเดียนวัตกรรม", description: "เรานำเสนอโซลูชันที่สดใหม่และสร้างสรรค์" },
-    { icon: "⚡", title: "ประสิทธิภาพสูง", description: "เวลาโหลดที่รวดเร็วและประสบการณ์ผู้ใช้ที่ราบรื่น" },
-    { icon: "🛡️", title: "ปลอดภัยและเชื่อถือได้", description: "ข้อมูลของคุณปลอดภัยด้วยมาตรการความปลอดภัยระดับสูงของเรา" },
-  ]
+  const messages = [
+    "This is a Minecraft chat that can help make writing mods easier",
+    "Start creating your Minecraft mod with ease!",
+    "Enhance your Minecraft experience with custom mods",
+    "Build, modify, and share your Minecraft mods easily",
+    "A chatbot that helps you code Minecraft mods effortlessly"
+  ];
+
+  const [displayedText, setDisplayedText] = useState("");
+  const [index, setIndex] = useState(0);
+  const [message, setMessage] = useState(messages[0]);
+
+  useEffect(() => {
+    const typingSpeed = 40;
+    const delayBetweenLoops = 2000;
+
+    if (index < message.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText((prev) => prev + message[index]);
+        setIndex((prev) => prev + 1);
+      }, typingSpeed);
+
+      return () => clearTimeout(timeout);
+    } else {
+      const resetTimeout = setTimeout(() => {
+        const newMessage = messages[Math.floor(Math.random() * messages.length)];
+        setMessage(newMessage);
+        setDisplayedText("");
+        setIndex(0);
+      }, delayBetweenLoops);
+
+      return () => clearTimeout(resetTimeout);
+    }
+  }, [index, message]);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <nav className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="text-2xl font-bold text-blue-600">โลโก้ของคุณ</div>
-          <ul className="flex space-x-4">
-            <li>
-              <a href="#" className="text-gray-600 hover:text-blue-600">
-                หน้าหลัก
-              </a>
-            </li>
-            <li>
-              <a href="#" className="text-gray-600 hover:text-blue-600">
-                เกี่ยวกับเรา
-              </a>
-            </li>
-            <li>
-              <a href="#" className="text-gray-600 hover:text-blue-600">
-                บริการ
-              </a>
-            </li>
-            <li>
-              <a href="#" className="text-gray-600 hover:text-blue-600">
-                ติดต่อ
-              </a>
-            </li>
-          </ul>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
-            เข้าสู่ระบบ
-          </button>
+    <div className="min-h-screen relative bg-[#1a1a1a] font-prompt">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/images/ิbackgroud.png"
+          alt="Background"
+          className="object-cover w-full h-full brightness-50"
+        />
+      </div>
+
+      {/* Content Overlay */}
+      <div className="relative z-10">
+        {/* Navigation */}
+        <nav className="flex flex-col sm:flex-row justify-between items-center p-4 sm:p-6">
+          <a href="/" className="text-2xl sm:text-3xl md:text-4xl font-bold text-white hover:text-gray-200 transition-colors mb-4 sm:mb-0">
+            Build'S Gauntlet
+          </a>
+
+          <div className="flex gap-6 ml-auto mr-20 sm:mr-32 md:mr-48">
+            <a
+              href="/about"
+              className="text-lg sm:text-xl font-semibold text-white border-2 border-white px-6 py-2 rounded-full transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white hover:border-transparent transform hover:scale-105"
+            >
+              SignUP
+            </a>
+            <a
+              href="/chat"
+              className="text-lg sm:text-xl font-semibold text-white border-2 border-white px-6 py-2 rounded-full transition-all duration-300 hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 hover:text-white hover:border-transparent transform hover:scale-105"
+            >
+              SignIN
+            </a>
+          </div>
         </nav>
-      </header>
 
-      <main>
-        {/* Hero Section */}
-        <section className="bg-blue-600 text-white py-20">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">ยินดีต้อนรับสู่เว็บไซต์ของเรา</h1>
-            <p className="text-xl mb-8">ค้นพบคุณสมบัติและบริการที่น่าทึ่งที่ปรับแต่งมาเพื่อคุณโดยเฉพาะ</p>
-            {/* <button
-              className="bg-white text-blue-600 px-6 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition duration-300"
+        {/* Main Content */}
+        <main className="flex min-h-[80vh] px-4">
+          <div className="text-left pl-4 sm:pl-8 md:pl-12 mt-24 sm:mt-32 md:mt-40 max-w-2xl">
+            <motion.h2
+              key={message}
+              className="text-xl sm:text-2xl md:text-3xl text-white mb-6 sm:mb-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
             >
-              เริ่มต้นใช้งาน
-            </button> */}
-            <Link
-              href={route('chat.index')}
-              className="bg-white text-blue-600 px-6 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition duration-300"
-            >
-              ไปคุยกับแชทซะไอจืดดดดด
-            </Link>
+              {displayedText}
+            </motion.h2>
+            <a href="/chat" className="inline-block mt-6 sm:mt-8">
+              <button className="bg-blue-500 bg-opacity-30 backdrop-blur-md border border-blue-300 text-white px-8 sm:px-12 md:px-16 py-4 sm:py-5 text-lg sm:text-xl rounded-2xl shadow-lg transition-all duration-300 hover:bg-opacity-50 hover:scale-105 transform hover:shadow-2xl">
+                GET STARTED
+              </button>
+            </a>
           </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">คุณสมบัติของเรา</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
-                <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-                  <div className="text-3xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 mt-auto">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-between">
-            <div className="w-full md:w-1/3 mb-6 md:mb-0">
-              <h3 className="text-xl font-bold mb-2">บริษัทของคุณ</h3>
-              <p className="text-gray-400">ให้บริการโซลูชันนวัตกรรมตั้งแต่ปี 2023</p>
-            </div>
-            <div className="w-full md:w-1/3 mb-6 md:mb-0">
-              <h4 className="text-lg font-semibold mb-2">ลิงก์ด่วน</h4>
-              <ul className="text-gray-400">
-                <li>
-                  <a href="#" className="hover:text-white">
-                    เกี่ยวกับเรา
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    บริการ
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    ติดต่อ
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    นโยบายความเป็นส่วนตัว
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div className="w-full md:w-1/3">
-              <h4 className="text-lg font-semibold mb-2">เชื่อมต่อกับเรา</h4>
-              <p className="text-gray-400 mb-2">ติดตามเราบนโซเชียลมีเดีย:</p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-white hover:text-blue-400">
-                  Facebook
-                </a>
-                <a href="#" className="text-white hover:text-blue-400">
-                  Twitter
-                </a>
-                <a href="#" className="text-white hover:text-blue-400">
-                  LinkedIn
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="mt-8 text-center text-gray-400">
-            <p>&copy; 2023 บริษัทของคุณ สงวนลิขสิทธิ์</p>
-          </div>
-        </div>
-      </footer>
+        </main>
+      </div>
     </div>
-  )
+  );
 }
-
